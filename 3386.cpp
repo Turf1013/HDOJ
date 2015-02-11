@@ -21,7 +21,7 @@ map<string, int>::iterator iter;
 char s[MAXL];
 
 int main() {
-	int n = 1;
+	int n = 1, t=0, tt;
 	int i, j, k, u, v;
 	string ss, src;
 	
@@ -33,10 +33,13 @@ int main() {
 	while (gets(s) != NULL) {
 		if (strcmp(s, "GRAPH BEGIN") == 0) {
 			// init
+			if (t++)
+				printf("\n");
 			memset(m, false, sizeof(m));
 			tb.clear();
 			rtb.clear();
 			n = 1;
+			tt = 0;
 			while (1) {
 				gets(s);
 				if (strcmp(s, "GRAPH END") == 0)
@@ -87,15 +90,20 @@ int main() {
 			valid[rorder[u]] = false;
 			while (i<n && valid[i] == false)
 				++i;
-			if (i < n)
-				printf("%s", rtb[order[i]].c_str());
+			if (i < n) {
+				if (tt)
+					printf(" %s", rtb[order[i]].c_str());
+				else
+					printf("%s", rtb[order[i]].c_str());
+				tt = 1;
+			}
 			while (++i < n) {
 				if (valid[i])
 					printf(" %s", rtb[order[i]].c_str());
 			}
-			printf("\n");
 		}
 	}
+	printf("\n");
 	
 	return 0;
 }
