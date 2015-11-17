@@ -224,7 +224,7 @@ if __name__=='__main__':
 	
 	if len(sys.argv) > 2:
 		cmd = sys.argv[1]
-		if cmd == 'up':
+		if cmd.startswith('up'):
 			id_List = map(lambda x: (x,), sys.argv[2:])
 			update(id_List)
 		else:
