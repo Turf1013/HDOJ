@@ -1,29 +1,67 @@
 import sys
 import string
 from random import randint
+	
+def GenLine(bound, op=string.lowercase):
+	length = randint(1, bound)
+	ret = ""
+	uc = list(op)
+	eid = len(uc) - 1
+	for i in xrange(length):
+		idx = randint(0, eid)
+		ret += uc[idx]
+	return ret
 
+	
+def GenVector(bound, rng):
+	n = randint(1, bound)
+	ret = []
+	for i in xrange(n):
+		x = randint(*rng)
+		ret.append(x)
+	return ret
+	
 
+def	GenArray(bn, bm, rng):
+	n = randint(1, bn)
+	m = randint(1, bm)
+	ret = []
+	for i in xrange(n):
+		dataList = []
+		for j in xrange(m):
+			x = randint(*rng)
+			dataList.append(x)
+		ret.append( dataList )
+	return ret
+	
+	
+def VectorToStr(L):
+	ret = ""
+	n = len(L)
+	ret += "%d\n" % (n)
+	ret += " ".join(map(str, L)) + "\n"
+	return ret
+	
+	
+def ArrayToStr(L):
+	ret = ""
+	n = len(L)
+	m = len(L[0])
+	ret += "%d %d\n" % (n, m)
+	for l in L:
+		ret += " ".join(map(str, l)) + "\n"
+	return ret
+
+	
 def GenData(fileName):
-	lc = string.lowercase
 	with open(fileName, "w") as fout:
 		t = 20
-		bound = 10**5
-		fout.write("%d\n" % (t))
+		fout.write("%d\n" % t)
 		for tt in xrange(t):
-			# n = randint(100, 500)
-			n = 300
-			k = randint(1, n)
-			fout.write("%d %d\n" % (n, k))
-			tot = bound / n
-			for i in xrange(n):
-				length = randint(1, tot)
-				line = ""
-				for j in xrange(length):
-					idx = randint(0, 25)
-					line += lc[idx]
-				fout.write("%s\n" % line)
-		 
-		
+			L = GenArray(10, 5, (-10, 10))
+			line = ArrayToStr(L)
+			fout.write("%s" % line)	
+				
 		
 def MovData(srcFileName, desFileName):
 	with open(srcFileName, "r") as fin:
