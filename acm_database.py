@@ -152,6 +152,7 @@ def query(cmd='', topk=10):
 			
 			
 def update(id_List):
+	# print 'update'
 	with sqlite3.connect(db_filename) as conn:
 		cursor = conn.cursor()
 		try:
@@ -220,10 +221,15 @@ if __name__=='__main__':
 	# insert(prob_List)
 	# print 'nothing'
 	# test_query_by()
+	
 	if len(sys.argv) > 2:
 		cmd = sys.argv[1]
-		topk = int(sys.argv[2])
-		query(cmd, topk)
+		if cmd.startswith('up'):
+			id_List = map(lambda x: (x,), sys.argv[2:])
+			update(id_List)
+		else:
+			topk = int(sys.argv[2])
+			query(cmd, topk)
 	elif len(sys.argv) > 1:
 		cmd = sys.argv[1]
 		query(cmd)

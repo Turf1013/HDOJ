@@ -109,5 +109,6 @@ if __name__ == '__main__':
 	# test_insert()
 	# query_test()
 	# parse_all_problem()
-	query_test()
+	parse_status(check=True)
+	# query_test()
 	

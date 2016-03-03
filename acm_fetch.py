@@ -9,7 +9,7 @@ from urlparse import *
 
 global url, n_vol
 url  = "http://acm.hdu.edu.cn"
-n_vol = 43
+n_vol = 46
 
 def initLog():
 	# os.chdir(parentDirPath)
