@@ -208,207 +208,248 @@ int main() {
 
 ''')
 	code_4801 = r'''
-	/* 4801 */
-	#include <iostream>
-	#include <sstream>
-	#include <string>
-	#include <map>
-	#include <queue>
-	#include <set>
-	#include <stack>
-	#include <vector>
-	#include <deque>
-	#include <bitset>
-	#include <algorithm>
-	#include <cstdio>
-	#include <cmath>
-	#include <ctime>
-	#include <cstring>
-	#include <climits>
-	#include <cctype>
-	#include <cassert>
-	#include <functional>
-	#include <iterator>
-	#include <iomanip>
-	using namespace std;
-	#pragma comment(linker,"/STACK:102400000,1024000")
+/* 4801 */
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <map>
+#include <queue>
+#include <set>
+#include <stack>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <algorithm>
+#include <cstdio>
+#include <cmath>
+#include <ctime>
+#include <cstring>
+#include <climits>
+#include <cctype>
+#include <cassert>
+#include <functional>
+#include <iterator>
+#include <iomanip>
+using namespace std;
+#pragma comment(linker,"/STACK:102400000,1024000")
 
-	#define sti                set<int>
-	#define stpii            set<pair<int, int> >
-	#define mpii            map<int,int>
-	#define vi                vector<int>
-	#define pii                pair<int,int>
-	#define vpii            vector<pair<int,int> >
-	#define rep(i, a, n)     for (int i=a;i<n;++i)
-	#define per(i, a, n)     for (int i=n-1;i>=a;--i)
-	#define clr                clear
-	#define pb                 push_back
-	#define mp                 make_pair
-	#define fir                first
-	#define sec                second
-	#define all(x)             (x).begin(),(x).end()
-	#define SZ(x)             ((int)(x).size())
-	#define lson            l, mid, rt<<1
-	#define rson            mid+1, r, rt<<1|1
+#define sti                set<int>
+#define stpii            set<pair<int, int> >
+#define mpii            map<int,int>
+#define vi                vector<int>
+#define pii                pair<int,int>
+#define vpii            vector<pair<int,int> >
+#define rep(i, a, n)     for (int i=a;i<n;++i)
+#define per(i, a, n)     for (int i=n-1;i>=a;--i)
+#define clr                clear
+#define pb                 push_back
+#define mp                 make_pair
+#define fir                first
+#define sec                second
+#define all(x)             (x).begin(),(x).end()
+#define SZ(x)             ((int)(x).size())
+#define lson            l, mid, rt<<1
+#define rson            mid+1, r, rt<<1|1
 
-	#define LL __int64
+#define LL __int64
+#define ULL unsigned __int64
 
-	typedef struct {
-		char a[24];
-	} node_t;
+typedef struct {
+    char a[24];
+} node_t;
 
-	typedef struct {
-		node_t p;
-		int pre, deep;
-	} node;
+typedef struct {
+    node_t p;
+    int pre, deep;
+} node;
 
-	int a[24], b[24];
-	int n;
-	int face[6][4] = {
-		{0, 1, 2, 3},
-		{4, 5, 10, 11},
-		{6, 7, 12, 13},
-		{8, 9, 14, 15},
-		{16, 17, 18, 19},
-		{20, 21, 22, 23}
-	};
+int a[24], b[24];
+int n;
+int face[6][4] = {
+    {0, 1, 2, 3},
+    {4, 5, 10, 11},
+    {6, 7, 12, 13},
+    {8, 9, 14, 15},
+    {16, 17, 18, 19},
+    {20, 21, 22, 23}
+};
 
-	int movf[3][12] = {
-		{0,1,3,2,         22,23,9,8,7,6,5,4},
-		{4,5,11,10,        0,2,6,12,16,18,20,22},
-		{6,7,13,12,        2,3,8,14,17,16,11,5}
-	};
-	int movp[6][24];
-	int nxt[4];
-	int unxt[4];
-	int ans;
-	vector<node_t> vc[8];
+int movf[3][12] = {
+    {0,1,3,2,         22,23,9,8,7,6,5,4},
+    // {18,19,17,16,     20,21,15,14,13,12,11,10,},
+    {4,5,11,10,        0,2,6,12,16,18,20,22},
+    // {9,8,14,15,        1,3,7,13,17,19,21,23},
+    {6,7,13,12,        2,3,8,14,17,16,11,5}
+    // {22,23,21,20,      0,1,9,15,19,18,10,4},
+};
+int movp[6][24];
+int nxt[4];
+int unxt[4];
+int ans;
+vector<node_t> vc[8];
 
-	void bfs();
+void bfs();
 
-	void init() {
-		rep(i, 0, 4) {
-			nxt[i] = (i+1) % 4;
-			unxt[i] = (i-1+4)%4;
-		}
+void init() {
+    rep(i, 0, 4) {
+        nxt[i] = (i+1) % 4;
+        unxt[i] = (i-1+4)%4;
+    }
+    
+    int i, j, k;
+    for (k=0,j=0; k<3; ++k,j+=2) {
+        int *mf = movf[k];
+        int *c = movp[j];
+        for (i=0; i<24; ++i)    c[i] = i;
+        for (i=0; i<4; ++i)
+            c[mf[nxt[i]]] = mf[i];
+        for (i=0; i<4; ++i) {
+            c[mf[(nxt[i]<<1)+4]] = mf[(i<<1)+4];
+            c[mf[(nxt[i]<<1|1)+4]] = mf[(i<<1|1)+4];
+        }
+        
+        c = movp[j+1];
+        for (i=0; i<24; ++i)    c[i] = i;
+        for (i=0; i<4; ++i)
+            c[mf[unxt[i]]] = mf[i];
+        for (i=0; i<4; ++i) {
+            c[mf[(unxt[i]<<1)+4]] = mf[(i<<1)+4];
+            c[mf[(unxt[i]<<1|1)+4]] = mf[(i<<1|1)+4];
+        }
+    }
+    
+    bfs();
+}
+
+typedef struct Hash {
+	static const int MOD = 754283;//3547693;
+	set<ULL> st;
+	
+	void clear() {
+		st.clr();
+	}
+	
+	ULL HashCode(const char *s) {
+		ULL ret = 0;
 		
-		int i, j, k;
-		for (k=0,j=0; k<3; ++k,j+=2) {
-			int *mf = movf[k];
-			int *c = movp[j];
-			for (i=0; i<24; ++i)	c[i] = i;
-			for (i=0; i<4; ++i)
-				c[mf[nxt[i]]] = mf[i];
-			for (i=0; i<4; ++i) {
-				c[mf[(nxt[i]<<1)+4]] = mf[(i<<1)+4];
-				c[mf[(nxt[i]<<1|1)+4]] = mf[(i<<1|1)+4];
-			}
+		rep(i, 0, 24)
+			ret = ret * MOD + s[i];
 			
-			c = movp[j+1];
-			for (i=0; i<24; ++i)	c[i] = i;
-			for (i=0; i<4; ++i)
-				c[mf[unxt[i]]] = mf[i];
-			for (i=0; i<4; ++i) {
-				c[mf[(unxt[i]<<1)+4]] = mf[(i<<1)+4];
-				c[mf[(unxt[i]<<1|1)+4]] = mf[(i<<1|1)+4];
-			}
-		}
-		
-		bfs();
-	}
-
-	void bfs() {
-		queue<node> Q;
-		node nd, d;
-		int step = 0;
-		
-		rep(i, 0, 24)	nd.p.a[i] = i;
-		nd.pre = -1;
-		nd.deep = 0;
-		Q.push(nd);
-		vc[step].pb(nd.p);
-		
-		while (1) {
-			int sz = SZ(Q);
-			if (sz==0 || ++step>7)
-				break;
-			while (sz--) {
-				nd = Q.front();
-				Q.pop();
-				rep(i, 0, 6) {
-					if ((i^1) == nd.pre)
-						continue;
-					if (i != nd.pre) {
-						rep(j, 0, 24)	d.p.a[j] = nd.p.a[movp[i][j]];
-						d.pre = i;
-						d.deep = 1;
-						vc[step].pb(d.p);
-						Q.push(d);
-						
-					} else if (nd.deep < 2) {
-						rep(j, 0, 24)	d.p.a[j] = nd.p.a[movp[i][j]];
-						d.pre = i;
-						d.deep = 2;
-						vc[step].pb(d.p);
-						Q.push(d);
-					}
-				}
-			}
-		}
-	}
-
-	int calc(int *b) {
-		int ret = 0;
-
-		rep(i, 0, 6) {
-			++ret;
-			rep(j, 1, 4) {
-				if (b[face[i][j]] != b[face[i][0]]) {
-					--ret;
-					break;
-				}
-			}
-		}
-
 		return ret;
 	}
-
-	void solve() {
-		ans = 0;
-
-		rep(i, 0, n+1) {
-			int sz = SZ(vc[i]);
-			rep(j, 0, sz) {
-				rep(k, 0, 24)
-					b[k] = a[vc[i][j].a[k]];
-				
-				ans = max(ans, calc(b));
-			}
+	
+	bool find(const node_t& p) {
+		ULL h = HashCode(p.a);
+		if (st.find(h) == st.end()) {
+			st.insert(h);
+			return false;
+		} else {
+			return true;
 		}
-
-		printf("%d\n", ans);
 	}
+	
+} Hash;
 
-	int main() {
-		ios::sync_with_stdio(false);
-		#ifndef ONLINE_JUDGE
-			freopen("data.in", "r", stdin);
-			freopen("data.out", "w", stdout);
-		#endif
+Hash tb;
 
-		init();
-		while (scanf("%d", &n)!=EOF) {
-			rep(i, 0, 24)
-				scanf("%d", &a[i]);
-			solve();
-		}
+void bfs() {
+    queue<node> Q;
+    node nd, d;
+    int step = 0;
+    
+    rep(i, 0, 24)    nd.p.a[i] = i;
+    nd.pre = -1;
+    nd.deep = 0;
+    Q.push(nd);
+	
+	tb.clr();
+    tb.find(nd.p);
+    vc[step].pb(nd.p);
+    
+    while (1) {
+        int sz = SZ(Q);
+        if (sz==0 || ++step>7)
+            break;
+        while (sz--) {
+            nd = Q.front();
+            Q.pop();
+            rep(i, 0, 6) {
+                if ((i^1) == nd.pre)
+                    continue;
+                if (i != nd.pre) {
+                    rep(j, 0, 24)    d.p.a[j] = nd.p.a[movp[i][j]];
+                    d.pre = i;
+                    d.deep = 1;
+                    
+                } else if (nd.deep < 2) {
+                    rep(j, 0, 24)    d.p.a[j] = nd.p.a[movp[i][j]];
+                    d.pre = i;
+                    d.deep = 2;
+                } else {
+                    continue;
+                }
+                
+                if (!tb.find(d.p)) {
+                    vc[step].pb(d.p);
+                    Q.push(d);
+                }
+            }
+        }
+    }
+}
 
-		#ifndef ONLINE_JUDGE
-			printf("time = %d.\n", (int)clock());
-		#endif
+int calc(int *b) {
+    int ret = 0;
 
-		return 0;
-	}
+    rep(i, 0, 6) {
+        ++ret;
+        rep(j, 1, 4) {
+            if (b[face[i][j]] != b[face[i][0]]) {
+                --ret;
+                break;
+            }
+        }
+    }
+
+    return ret;
+}
+
+void solve() {
+    ans = 0;
+
+    rep(i, 0, n+1) {
+        int sz = SZ(vc[i]);
+        rep(j, 0, sz) {
+            rep(k, 0, 24)
+                b[k] = a[vc[i][j].a[k]];
+            
+            ans = max(ans, calc(b));
+        }
+    }
+
+    printf("%d\n", ans);
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    #ifndef ONLINE_JUDGE
+        freopen("data.in", "r", stdin);
+        freopen("data.out", "w", stdout);
+    #endif
+
+    init();
+    while (scanf("%d", &n)!=EOF) {
+        rep(i, 0, 24)
+            scanf("%d", &a[i]);
+        solve();
+    }
+
+    #ifndef ONLINE_JUDGE
+        printf("time = %d.\n", (int)clock());
+    #endif
+
+    return 0;
+}
 	'''
 
 class CFS(constForSubmit):
@@ -491,7 +532,7 @@ if __name__ == "__main__":
 	# logging.debug("acm submit end...")
 	
 	# 4801
-	user = "Bombe16"
+	user = "Bombe"
 	password = "496528674"
 	initLog();
 	logging.debug("acm submit begin...")

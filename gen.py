@@ -5,22 +5,16 @@ from random import randint, shuffle
     
 def GenData(fileName):
 	with open(fileName, "w") as fout:
-		t = 20
-		fout.write(t)
-		# for tt in xrange(t):
-			# n = randint(1, 1000)
-			# fout.write("%d\n" % (n))
-			# for i in xrange(n):
-				# op = randint(0, 1)
-				# if op:
-					# length = randint(1, 100)
-				# else:
-					# length = randint(1, 10)
-				# L = [randint(0, 1) for j in xrange(length)]
-				# if op:
-					# fout.write("?" + "".join(map(str, L)) + "\n")
-				# else:
-					# fout.write("+" + "".join(map(str, L)) + "\n")
+		t = 1
+		# fout.write(t)
+		bound = 10**5
+		for tt in xrange(t):
+			n = bound
+			fout.write("%d %d\n" % (n, b))
+			for i in xrange(n):
+				t = randint(1, 10**9)
+				d = randint(1, 10**9)
+				fout.write("%d %d\n" % (t, d))
 			
 			
 def MovData(srcFileName, desFileName):
