@@ -6,15 +6,13 @@ from random import randint, shuffle
 def GenData(fileName):
 	with open(fileName, "w") as fout:
 		t = 1
-		# fout.write(t)
-		bound = 10**5
+		# fout.write("%d\n" % (t))
+		# bound = (2**32) - 1
 		for tt in xrange(t):
-			n = bound
-			fout.write("%d %d\n" % (n, b))
-			for i in xrange(n):
-				t = randint(1, 10**9)
-				d = randint(1, 10**9)
-				fout.write("%d %d\n" % (t, d))
+			for j in xrange(1, 11):
+				for i in xrange(1, j+1):
+					for k in xrange(1, j+1):
+						fout.write("%d %d %d\n" % (j, i, k))
 			
 			
 def MovData(srcFileName, desFileName):
@@ -45,6 +43,8 @@ def CompData():
 if __name__ == "__main__":
     srcFileName = "F:\Qt_prj\hdoj\data.in"
     desFileName = "F:\workspace\cpp_hdoj\data.in"
+    desFileName_ = "F:\code_today\data.in"
     GenData(srcFileName)
     MovData(srcFileName, desFileName)
-    
+    MovData(srcFileName, desFileName_)
+	
