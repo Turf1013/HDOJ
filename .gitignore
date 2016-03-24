@@ -4,6 +4,7 @@ ehthumbs.db
 Desktop.ini
 *.log
 *.html
+*.out
 
 # Python:
 *.py[cod]
