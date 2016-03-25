@@ -325,3 +325,134 @@ int main() {
 
 	return 0;
 }
+
+//////// AC final Program
+/* 2170 */
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <map>
+#include <queue>
+#include <set>
+#include <stack>
+#include <vector>
+#include <deque>
+#include <bitset>
+#include <algorithm>
+#include <cstdio>
+#include <cmath>
+#include <ctime>
+#include <cstring>
+#include <climits>
+#include <cctype>
+#include <cassert>
+#include <functional>
+#include <iterator>
+#include <iomanip>
+using namespace std;
+//#pragma comment(linker,"/STACK:102400000,1024000")
+
+#define sti				set<int>
+#define stpii			set<pair<int, int> >
+#define mpii			map<int,int>
+#define vi				vector<int>
+#define pii				pair<int,int>
+#define vpii			vector<pair<int,int> >
+#define rep(i, a, n) 	for (int i=a;i<n;++i)
+#define per(i, a, n) 	for (int i=n-1;i>=a;--i)
+#define clr				clear
+#define pb 				push_back
+#define mp 				make_pair
+#define fir				first
+#define sec				second
+#define all(x) 			(x).begin(),(x).end()
+#define SZ(x) 			((int)(x).size())
+#define lson			l, mid, rt<<1
+#define rson			mid+1, r, rt<<1|1
+#define INF				0x3f3f3f3f
+#define mset(a, val)	memset(a, (val), sizeof(a))
+
+int ans[10][100] = {
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,1,0,0,0,0,0,0,0,0,1,2,0,0,0,0,0,0,0,1,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,1,0,0,0,0,0,0,0,1,4,5,0,0,0,0,0,0,0,4,4,5,0,0,0,0,0,0,1,5,5,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,1,0,0,0,0,0,0,0,2,5,6,0,0,0,0,0,0,2,8,11,12,0,0,0,0,0,0,5,11,11,12,0,0,0,0,0,1,6,12,12,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,1,0,0,0,0,0,0,1,7,12,13,0,0,0,0,0,1,8,29,34,35,0,0,0,0,0,7,29,29,34,35,0,0,0,0,0,12,34,34,34,35,0,0,0,0,1,13,35,35,35,35,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,1,0,0,0,0,0,0,2,13,18,19,0,0,0,0,0,7,48,84,89,90,0,0,0,0,2,48,66,102,107,108,0,0,0,0,13,84,102,102,107,108,0,0,0,0,18,89,107,107,107,108,0,0,0,1,19,90,108,108,108,108,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,1,0,0,0,0,0,1,11,30,37,38,0,0,0,0,3,63,169,223,230,231,0,0,0,1,63,140,307,361,368,369,0,0,0,11,169,307,307,361,368,369,0,0,0,30,223,361,361,361,368,369,0,0,0,37,230,368,368,368,368,369,0,0,1,38,231,369,369,369,369,369,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,0,0,0,0,0,3,25,53,60,61,0,0,0,1,43,256,466,543,550,551,0,0,0,43,224,820,1127,1204,1211,1212,0,0,3,256,820,893,1200,1277,1284,1285,0,0,25,466,1127,1200,1200,1277,1284,1285,0,0,53,543,1204,1277,1277,1277,1284,1285,0,0,60,550,1211,1284,1284,1284,1284,1285,0,1,61,551,1212,1285,1285,1285,1285,1285,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,16,68,108,117,118,0,0,0,21,277,842,1226,1329,1338,1339,0,0,21,287,1847,3234,3773,3876,3885,3886,0,1,277,1847,2376,4003,4542,4645,4654,4655,0,16,842,3234,4003,4003,4542,4645,4654,4655,0,68,1226,3773,4542,4542,4542,4645,4654,4655,0,108,1329,3876,4645,4645,4645,4645,4654,4655,0,117,1338,3885,4654,4654,4654,4654,4654,4655,1,118,1339,3886,4655,4655,4655,4655,4655,4655}
+};
+
+int main() {
+	ios::sync_with_stdio(false);
+	#ifndef ONLINE_JUDGE
+		freopen("data.in", "r", stdin);
+		freopen("data.out", "w", stdout);
+	#endif
+
+	int n, w, h;
+
+	while (scanf("%d%d%d",&n,&w,&h)!=EOF) {
+		--n;
+		--w;
+		--h;
+		cout << ans[n][w*10+h] << endl;
+	}
+
+	#ifndef ONLINE_JUDGE
+		printf("time = %d.\n", (int)clock());
+	#endif
+
+	return 0;
+}
+
+
+//////// Data Generator
+import sys
+import string
+from random import randint, shuffle
+
+    
+def GenData(fileName):
+	with open(fileName, "w") as fout:
+		t = 1
+		for tt in xrange(t):
+			for j in xrange(1, 11):
+				for i in xrange(1, j+1):
+					for k in xrange(1, j+1):
+						fout.write("%d %d %d\n" % (j, i, k))
+			
+			
+def MovData(srcFileName, desFileName):
+    with open(srcFileName, "r") as fin:
+        lines = fin.readlines()
+    with open(desFileName, "w") as fout:
+        fout.write("".join(lines))
+
+        
+def CompData():
+    print "comp"
+    srcFileName = "F:\Qt_prj\hdoj\data.out"
+    desFileName = "F:\workspace\cpp_hdoj\data.out"
+    srcLines = []
+    desLines = []
+    with open(srcFileName, "r") as fin:
+        srcLines = fin.readlines()
+    with open(desFileName, "r") as fin:
+        desLines = fin.readlines()
+    n = min(len(srcLines), len(desLines))-1
+    for i in xrange(n):
+        ans2 = int(desLines[i])
+        ans1 = int(srcLines[i])
+        if ans1 > ans2:
+            print "%d: wrong" % i
+
+            
+if __name__ == "__main__":
+    srcFileName = "F:\Qt_prj\hdoj\data.in"
+    desFileName = "F:\workspace\cpp_hdoj\data.in"
+    GenData(srcFileName)
+    MovData(srcFileName, desFileName)
+	
