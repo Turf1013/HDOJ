@@ -1,6 +1,8 @@
-#!/usr/env python
+#!usr/bin/env python
+#coding=utf-8
 
 import os
+import re
 from datetime import date
 import httplib
 import urllib2
@@ -48,6 +50,8 @@ class constForPku:
 	probTitle_xpath = "/html/body/table[2]/tr/td/div[2]"
 	describe_xpath = "/html/body/table[2]/tr/td/div[4]"
 	solved_xpath = "/html/body/center/table/tr[3]/td[3]/script"
+	wait_Token = r"<font size=5>Please retry after 5000ms.Thank you."
+	re_wait = re.compile(wait_Token)
 	langDict = {
 		"G++"		: 0,
 		"GCC"		: 1,
@@ -255,7 +259,16 @@ def acmPku_Submit(pid, lang, code):
 	else:
 		langId = lang
 	submit_url = urljoin(CFP.mainPage, "submit?")
-	data = urllib.urlencode({"language":langId, "problem_id":pid, "source":code, "submit":"Submit", "encoded":0})
+	try:
+		data = urllib.urlencode({"language":langId, "problem_id":pid, "source":code, "submit":"Submit", "encoded":0})
+	except:
+		logging.debug("[encode-error]: pid = %s", pid)
+		with open("F:\code_today\data.out", "a") as fout:
+			fout.write("\n\n\n\n//****// %s\n" % (pid))
+			fout.write(code.encode("gb2312"))
+		logging.debug("[submit-fail]: pid = %s", pid)
+		return
+		
 	try:
 		req = urllib2.Request(submit_url, data)
 		response = urllib2.urlopen(req)
@@ -263,10 +276,25 @@ def acmPku_Submit(pid, lang, code):
 		# print content
 		
 	except:
-		print "submit unsucessful"
-		
+		# print "submit unsucessful"
+		pass
+	
+	
+def is_Zh(keyword):
+	for ch in keyword:
+		if ord(ch)>=128:
+			return True
+	return False
+	
+	
+def acmPku_Wait(content):
+	return CFP.re_wait.search(content)
+	
 
 def acmPku_Search(keyword):
+	# keyword must not chinese or pku make you to wait for another 5000ms. WTF.
+	if is_Zh(keyword):
+		return ""
 	search_url = urljoin(CFP.mainPage, "searchproblem")
 	try:
 		data = urllib.urlencode({"B1":"GO", "field":"title", "key":keyword.strip()})
@@ -275,8 +303,12 @@ def acmPku_Search(keyword):
 		return ""
 	try:
 		req = urllib2.Request(search_url, data)
-		response = urllib2.urlopen(req)
-		content = response.read()
+		while True:
+			content = urllib2.urlopen(req).read()
+			if acmPku_Wait(content):
+				sleep(6)
+			else:
+				break
 		return  content
 		
 	except:
@@ -317,7 +349,12 @@ def acmPku_parseProblemInfo(content):
 	
 	
 def acmPku_getProblemList(content):
-	tree = etree.HTML(content)
+	try:
+		tree = etree.HTML(content)
+	except:
+		with open("data.out", "w") as fout:
+			fout.write(content)
+		raise ValueError, "etree.HTML error"
 	eleList = tree.xpath(CFP.searchTitle_xpath)
 	retList = []
 	for i,ele in enumerate(eleList[1:]):
@@ -366,10 +403,10 @@ def acmPku_SubmitOnce(user, pid, lang, code):
 	while True:
 		status = acmPku_Status_Parse(user, pid)
 		status = status.strip()
-		print status
+		# print status
 		if status=="Waiting" or status=="Compiling" or status.startswith("Running"):
 			continue
-		logging.debug("%s: %s" % (pid, status))
+		# logging.debug("%s: %s" % (pid, status))
 		break
 	return status
 	
@@ -377,9 +414,9 @@ def acmPku_SubmitOnce(user, pid, lang, code):
 if __name__ == "__main__":
 	initLog()
 	
-	hdu_user = "Bombe16"
-	pku_user = "Bombe1013"
-	password = "496528674"
+	hdu_user = "XXXXX"
+	pku_user = "XXXXX"
+	password = "XXXXX"
 	# logging.debug("hdu login begin...")
 	# hdu_opener = acmHdu_Login(hdu_user, password)
 	
