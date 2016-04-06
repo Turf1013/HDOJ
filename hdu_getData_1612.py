@@ -511,9 +511,8 @@ def acmHdu_Submit4801(user, pid, lang):
 	return mintime
 	
 if __name__ == "__main__":
-	# 4801
 	user = "XXXX"
-	password = "XXXXX"
+	password = "XXXX"
 	initLog();
 	logging.debug("acm submit begin...")
 	acmHdu_Login(user, password)
