@@ -82,8 +82,8 @@ def acmHdu_Login(user, password):
 		
 		
 if __name__ == "__main__":
-	user = "Trasier"
-	password = "496528674"
+	user = "XXXXX"
+	password = "XXXXXX"
 	initLog();
 	logging.debug("acm fetch begin...")
 	acmHdu_Login(user, password)
