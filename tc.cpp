@@ -15,8 +15,7 @@ using namespace std;
 #define sec				second
 #define all(x) 			(x).begin(),(x).end()
 #define SZ(x) 			((int)(x).size())
-#define INF				0x3f3f3f3f
-#define mset(a, val)	memset(a, (val), sizeof(a))
+
 #define DEBUG
 
 int main() {
