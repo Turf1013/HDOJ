@@ -66,7 +66,7 @@ class blog(object):
 		self.opener.addheaders = [
 			('User-agent', 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6')
 		]
-		self.driver = driver = webdriver.PhantomJS(executable_path=CFB.phatomJS_path)
+		self.driver = webdriver.PhantomJS(executable_path=CFB.phatomJS_path)
 	
 	
 	def fetchByTag(self, tagList=[]):
@@ -150,6 +150,7 @@ class blog(object):
 		
 	@staticmethod	
 	def restore(url):
+		# return "http://www.cnblogs.com/qwerty1013/p/" + url + ".html"
 		return CFB.blog_prefix + url + ".html"
 	
 		
@@ -177,9 +178,23 @@ class blog(object):
 			sleep(randint(5, 10))
 		
 		
+	def	storePage(self, source, filename):
+		filename = os.path.join("F:\\code_today", filename)
+		fout = codecs.open(filename, "w", "utf-8")
+		fout.write(source)
+		fout.close()
+		
+		
 	def incView(self, url):
-		self.driver.get(url)
-		sleep(1)
+		# self.driver.get(url)
+		# self.storePage(self.driver.page_source, url[url.rindex('/')+1:])
+		# sleep(randint(1, 2))
+		# self.driver.close()
+		driver = webdriver.PhantomJS(executable_path=CFB.phatomJS_path)
+		driver.get(url)
+		# self.storePage(driver.page_source, url[url.rindex('/')+1:])
+		sleep(randint(1, 2))
+		driver.close()
 		
 		
 	def search(self, tag):
@@ -202,6 +217,10 @@ class blog(object):
 		shuffle(urls)
 		n = min(50, len(urls))
 		self.cheat(urls[:n])
+		
+		
+	def close(self):
+		self.driver.quit()
 		
 		
 def usage():
@@ -230,5 +249,6 @@ if __name__ == "__main__":
 				tag = value
 	# print tag
 	bg.cheatByFile(tag)
+	bg.close()
 	
 		
