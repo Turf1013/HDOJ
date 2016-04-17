@@ -47,6 +47,7 @@ class constForBlog:
 		"FPGA",
 		"Qemu",
 		"MIPS",
+		"python",
 	]
 	blogLinkInCate_xpath = "/html/body/div[2]/div/h5/a"
 	tagPageNum_xpath = "/html/body/div[2]/div/div[1]/div/a"
