@@ -54,7 +54,12 @@ class constForBlog:
 	blogLinkInTag_xpath = "/html/body/div[2]/div/div/div[1]/a"
 	HREF = "href"
 	HTML = "html"
-	phatomJS_path = r"E:\Software\phantomjs\bin\phantomjs.exe"
+	if sys.platform.startswith('linux'):
+		phatomJS_path = r"/home/turf/Software/phantomjs/phantomjs"
+	elif sys.platform.startswith('win'):
+		phatomJS_path = r"E:\Software\phantomjs\bin\phantomjs.exe"
+	else:
+		raise ValueError, "unknown system platform"
 	
 class CFB(constForBlog):
 	pass
