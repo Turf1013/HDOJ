@@ -5,6 +5,7 @@ Desktop.ini
 *.log
 *.html
 *.out
+tmp*
 
 # Python:
 *.py[cod]
