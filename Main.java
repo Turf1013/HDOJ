@@ -28,7 +28,7 @@ class InputReader {
 	public StringTokenizer tokenizer;
 	
 	public InputReader(InputStream stream) {
-		reader = new BufferedReader(new InputStreamReader(stream));
+		reader = new BufferedReader(new InputStreamReader(stream), 32768);
 		tokenizer = null;
 	}
 	

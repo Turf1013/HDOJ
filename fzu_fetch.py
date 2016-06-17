@@ -189,8 +189,8 @@ def acmHdu_Submit1952(user, pid, template):
 			
 	
 if __name__ == "__main__":
-	user = "Trasier"
-	password = "496528674"
+	user = "XXX"
+	password = "XXX"
 	initLog();
 	logging.debug("acm submit begin...")
 	acmFzu_Login(user, password)
